@@ -20,6 +20,7 @@ const allowedOrigins = [
     "http://localhost:5174",
     "http://127.0.0.1:5173",
     "http://127.0.0.1:5174",
+    "https://client-silk-eight.vercel.app",
 ].filter(Boolean);
 
 app.use(
@@ -42,8 +43,13 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/api', express.static("uploads"));
 app.use("/api", router);
+
+// Fallback support for frontend requests configured without /api
+app.use(express.static("uploads"));
+app.use("/", router);
+
 app.get("/", (req, res) => {
     res.send("Server Running Successfully");
-})
+});
 
 app.listen(PORT, () => { console.log(`Server Listening at http://localhost:${PORT}`) });
